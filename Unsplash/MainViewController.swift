@@ -7,8 +7,12 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 
 class MainViewController: UIViewController {
+    var searchText = ""
+    var images: [Results] = []
+    
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
         label.text = "Unsplash"
@@ -42,6 +46,7 @@ class MainViewController: UIViewController {
         button.tintColor = .white
         button.backgroundColor = .systemPink
         button.layer.cornerRadius = 12
+        button.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
         return button
     }()
     
@@ -51,26 +56,76 @@ class MainViewController: UIViewController {
         return indicator
     }()
     
-//    private let stackView: UIStackView = {
-//        let stackView = UIStackView()
-//        stackView.axis = .vertical
-//        stackView.alignment = .center
-//        stackView.distribution = .fillEqually
-//        return stackView
-//    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
         view.addGestureRecognizer(backGesture)
-
-//        stackView.addArrangedSubview(logoLabel)
-//        stackView.addArrangedSubview(segment)
-//        [logoLabel, segment]
-//            .forEach { stackView.addArrangedSubview($0) }
-//        layout()
         
+        layout()
+    }
+    
+    @objc func tapSegment(sender: UISegmentedControl) {
+        print(sender.selectedSegmentIndex)
+        switch sender.selectedSegmentIndex {
+        case 0:
+            searchBar.placeholder = "키워드 검색"
+        case 1:
+            searchBar.placeholder = "작가 검색"
+        default:
+            return
+        }
+    }
+    
+    @objc func tapBack() {
+        searchBar.endEditing(true)
+    }
+    
+    @objc func tapSearchButton() {
+//        Task {
+//            try await afRequest(searchText)
+//        }
+        fetchImage(searchText)
+        
+//        let photoViewController = PhotoViewController()
+//        navigationController?.pushViewController(photoViewController, animated: true)
+    }
+}
+
+extension MainViewController {
+    func fetchImage(_ keyword: String) {
+        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
+
+        let parameters: Parameters = [
+            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
+        ]
+
+        AF
+            .request(url, method: .get)
+            .responseDecodable(of: UnsplashAPI.self) { response in
+                switch response.result {
+                case .success(let result):
+                    print(result)
+                case .failure(let error):
+                    print(url)
+                    print("☺️\(error.localizedDescription)")
+                }
+            }
+            .resume()
+    }
+    
+//    func afRequest(_ keyword: String) async throws {
+//        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
+//
+//        let parameters: Parameters = [
+//            "Authorization": "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
+//        ]
+//        let dataTask = AF.request(url, method: .get, parameters: parameters).serializingDecodable(UnsplashAPI.self)
+//        let value = try await dataTask.value.results
+//        images = value
+//    }
+        
+    func layout() {
         [logoLabel, segment, searchBar, searchButton, indicator]
             .forEach { view.addSubview($0) }
         
@@ -101,29 +156,12 @@ class MainViewController: UIViewController {
             $0.trailing.equalTo(searchButton).inset(20)
         }
     }
-    
-    @objc func tapSegment(sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
-        switch sender.selectedSegmentIndex {
-        case 0:
-            searchBar.placeholder = "키워드 검색"
-        case 1:
-            searchBar.placeholder = "작가 검색"
-        default:
-            return
-        }
-    }
-    
-    @objc func tapBack() {
-        view.endEditing(true)
-    }
-    
-    func layout() {
-    }
 }
 
 extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
+        self.searchText = searchText
+        
     }
 }
