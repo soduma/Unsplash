@@ -8,13 +8,9 @@
 import Foundation
 
 struct UnsplashAPI: Codable {
-    let results: [Results]
-}
-
-struct Results: Codable {
-    let id: String?
-    let blurHash: String?
-    let urls: Urls?
+    let id: String
+    let blurHash: String
+    let urls: Urls
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,5 +20,6 @@ struct Results: Codable {
 }
 
 struct Urls: Codable {
-    let regular: String?
+    let raw: String
+    let small: String
 }

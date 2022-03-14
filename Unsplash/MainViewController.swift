@@ -11,7 +11,7 @@ import Alamofire
 
 class MainViewController: UIViewController {
     var searchText = ""
-    var images: [Results] = []
+    var images: [UnsplashAPI] = []
     
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
@@ -50,12 +50,6 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    private lazy var indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.startAnimating()
-        return indicator
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,51 +76,44 @@ class MainViewController: UIViewController {
     }
     
     @objc func tapSearchButton() {
-//        Task {
-//            try await afRequest(searchText)
-//        }
-        fetchImage(searchText)
-        
-//        let photoViewController = PhotoViewController()
-//        navigationController?.pushViewController(photoViewController, animated: true)
+        let photovc = PhotoViewController(images: images)
+        navigationController?.pushViewController(photovc, animated: true)
     }
 }
 
 extension MainViewController {
     func fetchImage(_ keyword: String) {
-        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
-
-        let parameters: Parameters = [
-            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
-        ]
-
+//        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
+        
+//        let parameters: Parameters = [
+//            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
+//        ]
+//        Thread.sleep(forTimeInterval: 2)
+        guard let url = URL(string: "https://api.unsplash.com/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return }
+        
+//        await AF.request(url, method: .get)
+//            .serializingDecodable([UnsplashAPI].self).value
+        
+//        let dataTask = AF.request(url, method: .get).serializingDecodable([UnsplashAPI].self)
+//        let response = dataTask.response
+//        print("😇 \(response.result)")
+        
         AF
             .request(url, method: .get)
-            .responseDecodable(of: UnsplashAPI.self) { response in
+            .responseDecodable(of: [UnsplashAPI].self) { response in
                 switch response.result {
                 case .success(let result):
-                    print(result)
+                    self.images = result
+                    print("😁 \(self.images)")
                 case .failure(let error):
-                    print(url)
                     print("☺️\(error.localizedDescription)")
                 }
             }
             .resume()
     }
-    
-//    func afRequest(_ keyword: String) async throws {
-//        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
-//
-//        let parameters: Parameters = [
-//            "Authorization": "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
-//        ]
-//        let dataTask = AF.request(url, method: .get, parameters: parameters).serializingDecodable(UnsplashAPI.self)
-//        let value = try await dataTask.value.results
-//        images = value
-//    }
         
     func layout() {
-        [logoLabel, segment, searchBar, searchButton, indicator]
+        [logoLabel, segment, searchBar, searchButton,]
             .forEach { view.addSubview($0) }
         
         logoLabel.snp.makeConstraints {
@@ -150,18 +137,13 @@ extension MainViewController {
             $0.leading.trailing.equalTo(segment)
             $0.height.equalTo(40)
         }
-        
-        indicator.snp.makeConstraints {
-            $0.centerY.equalTo(searchButton)
-            $0.trailing.equalTo(searchButton).inset(20)
-        }
     }
 }
 
 extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
+        fetchImage(searchText)
         self.searchText = searchText
-        
     }
 }
