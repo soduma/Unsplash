@@ -8,7 +8,9 @@
 import UIKit
 
 class PhotoViewController: UIViewController {
-    var images: [UnsplashAPI]
+    var images: [Results]
+    var text: String
+    let manager = Manager()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -20,8 +22,17 @@ class PhotoViewController: UIViewController {
         return tableView
     }()
     
-    init(images: [UnsplashAPI]) {
+    private lazy var indicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.color = .systemRed
+        indicator.backgroundColor = .systemOrange
+        return indicator
+    }()
+    
+    init(images: [Results], text: String) {
         self.images = images
+        self.text = text
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -33,12 +44,30 @@ class PhotoViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        print("😍 \(images)")
+        indicator.startAnimating()
         
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        Task {
+            print("fetch start🥶")
+            await fetch()
+            print("😍 \(images)")
+            
+            view.addSubview(tableView)
+            tableView.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+            
+            indicator.stopAnimating()
         }
+        
+        view.addSubview(indicator)
+        indicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+    }
+
+    func fetch() async {
+        let result = await manager.fetchWithAsync(text)
+        images = result
     }
 }
 
@@ -49,7 +78,8 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "photo", for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
-        let image = images[indexPath.row].urls.small
+        let image = images[indexPath.row].urls.raw
+//        let image = images[indexPath.row].urls.small
         cell.setupImage(imageURL: image)
         cell.layoutIfNeeded()
         return cell

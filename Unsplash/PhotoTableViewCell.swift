@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
+//import Kingfisher
 
 class PhotoTableViewCell: UITableViewCell {
     private lazy var photoImageView: UIImageView = {
@@ -28,8 +28,9 @@ class PhotoTableViewCell: UITableViewCell {
     }
     
     func setupImage(imageURL: String) {
-        let url = URL(string: imageURL)!
-        let data = try? Data(contentsOf: url)
-        photoImageView.image = UIImage(data: data!)
+        guard let url = URL(string: imageURL) else { return }
+        if let data = try? Data(contentsOf: url) {
+            photoImageView.image = UIImage(data: data)
+        }
     }
 }

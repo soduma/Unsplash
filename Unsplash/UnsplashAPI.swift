@@ -8,6 +8,10 @@
 import Foundation
 
 struct UnsplashAPI: Codable {
+    let results: [Results]
+}
+
+struct Results: Codable {
     let id: String
     let blurHash: String
     let urls: Urls

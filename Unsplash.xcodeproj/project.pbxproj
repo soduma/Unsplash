@@ -18,6 +18,7 @@
 		A0A4656C27DDCC7E004C226B /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */; };
 		A0A4656F27DDDCC7004C226B /* UnsplashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4656E27DDDCC7004C226B /* UnsplashAPI.swift */; };
 		A0A4657327DF1EA1004C226B /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */; };
+		A0A4657727DF33A7004C226B /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657627DF33A7004C226B /* Manager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		A0A4656E27DDDCC7004C226B /* UnsplashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashAPI.swift; sourceTree = "<group>"; };
 		A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTableViewCell.swift; sourceTree = "<group>"; };
+		A0A4657627DF33A7004C226B /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				A028BCA127C8B19100487E66 /* AppDelegate.swift */,
 				A028BCA327C8B19100487E66 /* SceneDelegate.swift */,
 				A0A4656E27DDDCC7004C226B /* UnsplashAPI.swift */,
+				A0A4657627DF33A7004C226B /* Manager.swift */,
 				A028BCA527C8B19100487E66 /* MainViewController.swift */,
 				A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */,
 				A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */,
@@ -163,6 +166,7 @@
 				A0A4656F27DDDCC7004C226B /* UnsplashAPI.swift in Sources */,
 				A0A4657327DF1EA1004C226B /* PhotoTableViewCell.swift in Sources */,
 				A0A4656C27DDCC7E004C226B /* PhotoViewController.swift in Sources */,
+				A0A4657727DF33A7004C226B /* Manager.swift in Sources */,
 				A028BCA227C8B19100487E66 /* AppDelegate.swift in Sources */,
 				A028BCA427C8B19100487E66 /* SceneDelegate.swift in Sources */,
 			);

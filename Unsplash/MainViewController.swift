@@ -10,8 +10,8 @@ import SnapKit
 import Alamofire
 
 class MainViewController: UIViewController {
-    var searchText = ""
-    var images: [UnsplashAPI] = []
+    var searchText = "korea"
+    var images: [Results] = []
     
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
@@ -34,6 +34,7 @@ class MainViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
+        bar.text = "korea"
         bar.placeholder = "키워드 검색"
         bar.searchBarStyle = .minimal
         bar.delegate = self
@@ -56,6 +57,7 @@ class MainViewController: UIViewController {
         let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
         view.addGestureRecognizer(backGesture)
         
+        segment.isEnabled = false
         layout()
     }
     
@@ -76,41 +78,35 @@ class MainViewController: UIViewController {
     }
     
     @objc func tapSearchButton() {
-        let photovc = PhotoViewController(images: images)
+        let photovc = PhotoViewController(images: images, text: searchText)
         navigationController?.pushViewController(photovc, animated: true)
     }
 }
 
 extension MainViewController {
-    func fetchImage(_ keyword: String) {
-//        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
-        
-//        let parameters: Parameters = [
-//            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
-//        ]
-//        Thread.sleep(forTimeInterval: 2)
-        guard let url = URL(string: "https://api.unsplash.com/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return }
-        
-//        await AF.request(url, method: .get)
-//            .serializingDecodable([UnsplashAPI].self).value
-        
-//        let dataTask = AF.request(url, method: .get).serializingDecodable([UnsplashAPI].self)
-//        let response = dataTask.response
-//        print("😇 \(response.result)")
-        
-        AF
-            .request(url, method: .get)
-            .responseDecodable(of: [UnsplashAPI].self) { response in
-                switch response.result {
-                case .success(let result):
-                    self.images = result
-                    print("😁 \(self.images)")
-                case .failure(let error):
-                    print("☺️\(error.localizedDescription)")
-                }
-            }
-            .resume()
-    }
+    
+// MARK: - ordinary
+//    func fetchImage(_ keyword: String) {
+////        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
+////        let parameters: Parameters = [
+////            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
+////        ]
+//
+//        guard let url = URL(string: "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return }
+//
+//        AF
+//            .request(url, method: .get)
+//            .responseDecodable(of: UnsplashAPI.self) { response in
+//                switch response.result {
+//                case .success(let result):
+//                    self.images = result.results
+//                    print("😁 \(self.images)")
+//                case .failure(let error):
+//                    print("☺️\(error.localizedDescription)")
+//                }
+//            }
+//            .resume()
+//    }
         
     func layout() {
         [logoLabel, segment, searchBar, searchButton,]
@@ -143,7 +139,7 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
-        fetchImage(searchText)
+//        fetchImage(searchText)
         self.searchText = searchText
     }
 }
