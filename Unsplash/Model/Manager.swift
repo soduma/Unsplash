@@ -13,8 +13,8 @@ class Manager {
         guard let url = URL(string: "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return [] }
         
         do {
-            let first = try await AF.request(url, method: .get).serializingDecodable(UnsplashAPI.self).value
-            return first.results
+            let data = try await AF.request(url, method: .get).serializingDecodable(UnsplashAPI.self).value
+            return data.results
         } catch {
             print(error.localizedDescription)
             return []

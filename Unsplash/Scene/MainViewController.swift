@@ -87,11 +87,6 @@ extension MainViewController {
     
 // MARK: - ordinary
 //    func fetchImage(_ keyword: String) {
-////        guard let url = URL(string: "https://api.unsplash.com/search/photos?query=\(keyword)") else { return }
-////        let parameters: Parameters = [
-////            "Authorization" : "Client-ID oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0"
-////        ]
-//
 //        guard let url = URL(string: "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return }
 //
 //        AF

@@ -8,8 +8,8 @@
 import UIKit
 
 class PhotoViewController: UIViewController {
-    var images: [Results]
-    var text: String
+    var imageList: [Results]
+    var searchText: String
     let manager = Manager()
     
     private lazy var tableView: UITableView = {
@@ -22,17 +22,9 @@ class PhotoViewController: UIViewController {
         return tableView
     }()
     
-    private lazy var indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.style = .large
-        indicator.color = .systemRed
-        indicator.backgroundColor = .systemOrange
-        return indicator
-    }()
-    
     init(images: [Results], text: String) {
-        self.images = images
-        self.text = text
+        self.imageList = images
+        self.searchText = text
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,43 +36,36 @@ class PhotoViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        indicator.startAnimating()
         
         Task {
             print("fetch start🥶")
             await fetch()
-            print("😍 \(images)")
+            print("😍 \(imageList)")
             
             view.addSubview(tableView)
             tableView.snp.makeConstraints {
                 $0.edges.equalToSuperview()
             }
-            
-            indicator.stopAnimating()
-        }
-        
-        view.addSubview(indicator)
-        indicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
         }
     }
 
     func fetch() async {
-        let result = await manager.fetchWithAsync(text)
-        images = result
+        let result = await manager.fetchWithAsync(searchText)
+        imageList = result
     }
 }
 
 extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return images.count
+        return imageList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "photo", for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
-        let image = images[indexPath.row].urls.raw
-//        let image = images[indexPath.row].urls.small
-        cell.setupImage(imageURL: image)
+        let image = imageList[indexPath.row].urls.raw
+        let placeHolder = imageList[indexPath.row].blurHash
+        
+        cell.setupImage(imageURL: image, placeHolder: placeHolder)
         cell.layoutIfNeeded()
         return cell
     }
