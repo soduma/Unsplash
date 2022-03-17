@@ -36,6 +36,6 @@ class PhotoTableViewCell: UITableViewCell {
         guard let url = URL(string: imageURL),
               let placeHolder = placeHolder else { return }
         let holder = UIImage(blurHash: placeHolder, size: CGSize(width: 32, height: 32))
-        photoImageView.kf.setImage(with: url, placeholder: holder, options: [.forceRefresh])
+        photoImageView.kf.setImage(with: url, placeholder: holder, options: [.fromMemoryCacheOrRefresh])
     }
 }

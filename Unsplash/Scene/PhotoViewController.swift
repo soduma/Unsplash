@@ -10,6 +10,7 @@ import UIKit
 class PhotoViewController: UIViewController {
     var imageList: [Results]
     var searchText: String
+    var currentPage = 1
     let manager = Manager()
     
     private lazy var tableView: UITableView = {
@@ -50,7 +51,7 @@ class PhotoViewController: UIViewController {
     }
 
     func fetch() async {
-        let result = await manager.fetchWithAsync(searchText)
+        let result = await manager.fetchWithAsync(searchText, of: currentPage)
         imageList = result
     }
 }
@@ -62,7 +63,7 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "photo", for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
-        let image = imageList[indexPath.row].urls.raw
+        let image = imageList[indexPath.row].urls.regular
         let placeHolder = imageList[indexPath.row].blurHash
         
         cell.setupImage(imageURL: image, placeHolder: placeHolder)
@@ -72,5 +73,25 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.bounds.width
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffset_y = scrollView.contentOffset.y
+//        print(contentOffset_y)
+        let tableViewContentSize = tableView.contentSize.height
+//        print(tableViewContentSize)
+        let pagination_y = tableViewContentSize * 0.3
+        
+        if currentPage < 5 {
+            if contentOffset_y > tableViewContentSize - pagination_y {
+                currentPage += 1
+                print(currentPage)
+                Task {
+                    let result = await manager.fetchWithAsync(searchText, of: currentPage)
+                    imageList += result
+                    tableView.reloadData()
+                }
+            }
+        }
     }
 }
