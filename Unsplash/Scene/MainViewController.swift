@@ -78,8 +78,10 @@ class MainViewController: UIViewController {
     }
     
     @objc func tapSearchButton() {
-        let photovc = PhotoViewController(images: images, text: searchText)
-        navigationController?.pushViewController(photovc, animated: true)
+        if searchText != "" {
+            let photovc = PhotoViewController(images: images, text: searchText)
+            navigationController?.pushViewController(photovc, animated: true)
+        }
     }
 }
 
@@ -114,7 +116,7 @@ extension MainViewController {
         
         segment.snp.makeConstraints {
             $0.top.equalTo(logoLabel.snp.bottom).offset(50)
-            $0.leading.trailing.equalToSuperview().inset(100)
+            $0.leading.trailing.equalToSuperview().inset(28)
             $0.centerX.equalToSuperview()
         }
                 
@@ -124,9 +126,9 @@ extension MainViewController {
         }
         
         searchButton.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(50)
+            $0.top.equalTo(searchBar.snp.bottom).offset(40)
             $0.leading.trailing.equalTo(segment)
-            $0.height.equalTo(40)
+            $0.height.equalTo(60)
         }
     }
 }
