@@ -12,6 +12,7 @@ import Alamofire
 class MainViewController: UIViewController {
     var searchText = "korea"
     var images: [Results] = []
+    var segmentIndex: ImageSize = .full
     
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
@@ -24,10 +25,11 @@ class MainViewController: UIViewController {
     
     private lazy var segment: UISegmentedControl = {
         let segment = UISegmentedControl()
-        segment.insertSegment(with: UIImage(systemName: "photo"), at: 0, animated: true)
-        segment.insertSegment(with: UIImage(systemName: "person.fill"), at: 1, animated: true)
+        segment.insertSegment(withTitle: "RAW", at: 0, animated: true)
+        segment.insertSegment(withTitle: "Full", at: 1, animated: true)
+        segment.insertSegment(withTitle: "Small", at: 2, animated: true)
         segment.tintColor = .systemGray
-        segment.selectedSegmentIndex = 0
+        segment.selectedSegmentIndex = 1
         segment.addTarget(self, action: #selector(tapSegment(sender:)), for: .valueChanged)
         return segment
     }()
@@ -56,8 +58,6 @@ class MainViewController: UIViewController {
         
         let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
         view.addGestureRecognizer(backGesture)
-        
-        segment.isEnabled = false
         layout()
     }
     
@@ -65,11 +65,11 @@ class MainViewController: UIViewController {
         print(sender.selectedSegmentIndex)
         switch sender.selectedSegmentIndex {
         case 0:
-            searchBar.placeholder = "키워드 검색"
+            segmentIndex = .raw
         case 1:
-            searchBar.placeholder = "작가 검색"
+            segmentIndex = .full
         default:
-            return
+            segmentIndex = .small
         }
     }
     
@@ -79,7 +79,7 @@ class MainViewController: UIViewController {
     
     @objc func tapSearchButton() {
         if searchText != "" {
-            let photovc = PhotoViewController(images: images, text: searchText)
+            let photovc = PhotoViewController(images: images, text: searchText, segmentIndex: segmentIndex)
             navigationController?.pushViewController(photovc, animated: true)
         }
     }

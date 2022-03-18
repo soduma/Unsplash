@@ -7,10 +7,17 @@
 
 import UIKit
 
+enum ImageSize: String {
+    case raw
+    case full
+    case small
+}
+
 class PhotoViewController: UIViewController {
     var imageList: [Results]
     var searchText: String
     var currentPage = 1
+    var segmentIndex: ImageSize
     let manager = Manager()
     
     private lazy var tableView: UITableView = {
@@ -23,9 +30,10 @@ class PhotoViewController: UIViewController {
         return tableView
     }()
     
-    init(images: [Results], text: String) {
+    init(images: [Results], text: String, segmentIndex: ImageSize) {
         self.imageList = images
         self.searchText = text
+        self.segmentIndex = segmentIndex
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -63,12 +71,26 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "photo", for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
-        let image = imageList[indexPath.row].urls.regular
-        let placeHolder = imageList[indexPath.row].blurHash
         
-        cell.setupImage(imageURL: image, placeHolder: placeHolder)
-        cell.layoutIfNeeded()
-        return cell
+        switch segmentIndex {
+        case .raw:
+            let image = imageList[indexPath.row].urls.raw
+            let placeHolder = imageList[indexPath.row].blurHash
+            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            return cell
+            
+        case .full:
+            let image = imageList[indexPath.row].urls.regular
+            let placeHolder = imageList[indexPath.row].blurHash
+            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            return cell
+            
+        case .small:
+            let image = imageList[indexPath.row].urls.small
+            let placeHolder = imageList[indexPath.row].blurHash
+            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -77,15 +99,14 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let contentOffset_y = scrollView.contentOffset.y
-//        print(contentOffset_y)
         let tableViewContentSize = tableView.contentSize.height
-//        print(tableViewContentSize)
         let pagination_y = tableViewContentSize * 0.3
         
         if currentPage < 5 {
             if contentOffset_y > tableViewContentSize - pagination_y {
                 currentPage += 1
                 print(currentPage)
+                
                 Task {
                     let result = await manager.fetchWithAsync(searchText, of: currentPage)
                     imageList += result
