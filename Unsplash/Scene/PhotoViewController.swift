@@ -14,11 +14,11 @@ enum ImageSize: String {
 }
 
 class PhotoViewController: UIViewController {
-    var imageList: [Results]
-    var searchText: String
-    var currentPage = 1
-    var segmentIndex: ImageSize
-    let manager = Manager()
+    private var imageList: [Results]
+    private var searchText: String
+    private var currentPage = 1
+    private var segmentIndex: ImageSize
+    private let manager = Manager()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -44,23 +44,31 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        
         Task {
-            print("fetch start🥶")
             await fetch()
+            layout()
             print("😍 \(imageList)")
-            
-            view.addSubview(tableView)
-            tableView.snp.makeConstraints {
-                $0.edges.equalToSuperview()
-            }
         }
     }
 
-    func fetch() async {
-        let result = await manager.fetchWithAsync(searchText, of: currentPage)
-        imageList = result
+    private func fetch() async {
+        let result = await manager.fetchWithAsync(keyword: searchText, page: currentPage)
+        
+        switch result {
+        case .success(let data):
+            imageList += data.results
+            tableView.reloadData()
+        case.failure(let error):
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func layout() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }
 
@@ -98,20 +106,14 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentOffset_y = scrollView.contentOffset.y
-        let tableViewContentSize = tableView.contentSize.height
-        let pagination_y = tableViewContentSize * 0.3
+        let contentHeight = tableView.contentSize.height - tableView.frame.height
         
-        if currentPage < 5 {
-            if contentOffset_y > tableViewContentSize - pagination_y {
+        if tableView.contentOffset.y >= contentHeight {
+            print(currentPage)
+            
+            Task {
                 currentPage += 1
-                print(currentPage)
-                
-                Task {
-                    let result = await manager.fetchWithAsync(searchText, of: currentPage)
-                    imageList += result
-                    tableView.reloadData()
-                }
+                await fetch()
             }
         }
     }
