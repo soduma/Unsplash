@@ -9,15 +9,10 @@ import Foundation
 import Alamofire
 
 class Manager {
-    func fetchWithAsync(_ keyword: String, of page: Int) async -> [Results] {
-        guard let url = URL(string: "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)&page=\(page)") else { return [] }
+    func fetchWithAsync(keyword: String, page: Int) async -> Result<UnsplashAPI, AFError> {
+        let url = "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)&page=\(page)"
         
-        do {
-            let data = try await AF.request(url, method: .get).serializingDecodable(UnsplashAPI.self).value
-            return data.results
-        } catch {
-            print(error.localizedDescription)
-            return []
-        }
+        let data = await AF.request(url, method: .get).serializingDecodable(UnsplashAPI.self).result
+        return data
     }
 }
