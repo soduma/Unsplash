@@ -103,7 +103,7 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard loadedPage < 5, !isLoading else { return }
+        guard loadedPage < 3, !isLoading else { return }
         
         let contentHeight = scrollView.contentSize.height - scrollView.bounds.height
         if scrollView.contentOffset.y >= contentHeight {
