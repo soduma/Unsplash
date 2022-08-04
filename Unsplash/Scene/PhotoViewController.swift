@@ -7,18 +7,14 @@
 
 import UIKit
 
-enum ImageSize: String {
-    case raw
-    case full
-    case small
-}
-
 class PhotoViewController: UIViewController {
-    private var imageList: [Results]
+    private let networkManager = NetworkManager()
     private var searchText: String
-    private var currentPage = 1
     private var segmentIndex: ImageSize
-    private let manager = Manager()
+    
+    private var imageList: [Results] = []
+    private var loadedPage = 1
+    private var isLoading = false
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -26,12 +22,11 @@ class PhotoViewController: UIViewController {
         tableView.allowsSelection = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: "photo")
+        tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.identifier)
         return tableView
     }()
     
-    init(images: [Results], text: String, segmentIndex: ImageSize) {
-        self.imageList = images
+    init(text: String, segmentIndex: ImageSize) {
         self.searchText = text
         self.segmentIndex = segmentIndex
         super.init(nibName: nil, bundle: nil)
@@ -46,13 +41,15 @@ class PhotoViewController: UIViewController {
         
         Task {
             await fetch()
-            layout()
-            print("😍 \(imageList)")
+            isLoading = false
+            setLayout()
+//            print("😍 \(imageList)")
         }
     }
 
     private func fetch() async {
-        let result = await manager.fetchWithAsync(keyword: searchText, page: currentPage)
+        isLoading = true
+        let result = await networkManager.fetchWithAsync(keyword: searchText, page: loadedPage)
         
         switch result {
         case .success(let data):
@@ -63,7 +60,7 @@ class PhotoViewController: UIViewController {
         }
     }
     
-    private func layout() {
+    private func setLayout() {
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
         tableView.snp.makeConstraints {
@@ -78,7 +75,7 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "photo", for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoTableViewCell.identifier, for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
         
         switch segmentIndex {
         case .raw:
@@ -106,14 +103,15 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentHeight = tableView.contentSize.height - tableView.frame.height
+        guard loadedPage < 5, !isLoading else { return }
         
-        if tableView.contentOffset.y >= contentHeight {
-            print(currentPage)
-            
+        let contentHeight = scrollView.contentSize.height - scrollView.bounds.height
+        if scrollView.contentOffset.y >= contentHeight {
             Task {
-                currentPage += 1
+                loadedPage += 1
+                print(loadedPage)
                 await fetch()
+                isLoading = false
             }
         }
     }

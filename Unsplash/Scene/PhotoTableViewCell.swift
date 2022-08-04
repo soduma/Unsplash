@@ -10,6 +10,8 @@ import SnapKit
 import Kingfisher
 
 class PhotoTableViewCell: UITableViewCell {
+    static let identifier = "PhotoTableViewCell"
+    
     private lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -36,6 +38,6 @@ class PhotoTableViewCell: UITableViewCell {
         guard let url = URL(string: imageURL),
               let placeHolder = placeHolder else { return }
         let holder = UIImage(blurHash: placeHolder, size: CGSize(width: 32, height: 32))
-        photoImageView.kf.setImage(with: url, placeholder: holder, options: [.fromMemoryCacheOrRefresh])
+        photoImageView.kf.setImage(with: url, placeholder: holder)
     }
 }

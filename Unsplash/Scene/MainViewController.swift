@@ -9,9 +9,14 @@ import UIKit
 import SnapKit
 import Alamofire
 
+enum ImageSize: String {
+    case raw
+    case full
+    case small
+}
+
 class MainViewController: UIViewController {
-    var searchText = "korea"
-    var images: [Results] = []
+    var searchText = "Korea"
     var segmentIndex: ImageSize = .full
     
     private lazy var logoLabel: UILabel = {
@@ -36,7 +41,7 @@ class MainViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.text = "korea"
+        bar.text = "Korea"
         bar.placeholder = "키워드 검색"
         bar.searchBarStyle = .minimal
         bar.delegate = self
@@ -46,6 +51,7 @@ class MainViewController: UIViewController {
     private lazy var searchButton: UIButton = {
         let button = UIButton()
         button.setTitle("검색", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
         button.tintColor = .white
         button.backgroundColor = .systemPink
         button.layer.cornerRadius = 12
@@ -56,13 +62,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
-        view.addGestureRecognizer(backGesture)
-        layout()
+        setLayout()
     }
     
     @objc func tapSegment(sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
         switch sender.selectedSegmentIndex {
         case 0:
             segmentIndex = .raw
@@ -79,33 +82,14 @@ class MainViewController: UIViewController {
     
     @objc func tapSearchButton() {
         if searchText != "" {
-            let photovc = PhotoViewController(images: images, text: searchText, segmentIndex: segmentIndex)
-            navigationController?.pushViewController(photovc, animated: true)
+            let vc = PhotoViewController(text: searchText, segmentIndex: segmentIndex)
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
 
 extension MainViewController {
-    
-// MARK: - ordinary
-//    func fetchImage(_ keyword: String) {
-//        guard let url = URL(string: "https://api.unsplash.com/search/photos/?client_id=oqnMOq60UFw7nPf-1c2UDXVw0woMt00hVPQqZbmVvO0&query=\(keyword)") else { return }
-//
-//        AF
-//            .request(url, method: .get)
-//            .responseDecodable(of: UnsplashAPI.self) { response in
-//                switch response.result {
-//                case .success(let result):
-//                    self.images = result.results
-//                    print("😁 \(self.images)")
-//                case .failure(let error):
-//                    print("☺️\(error.localizedDescription)")
-//                }
-//            }
-//            .resume()
-//    }
-        
-    func layout() {
+    func setLayout() {
         [logoLabel, segment, searchBar, searchButton,]
             .forEach { view.addSubview($0) }
         
@@ -130,13 +114,15 @@ extension MainViewController {
             $0.leading.trailing.equalTo(segment)
             $0.height.equalTo(60)
         }
+        
+        let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
+        view.addGestureRecognizer(backGesture)
     }
 }
 
 extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
-//        fetchImage(searchText)
         self.searchText = searchText
     }
 }

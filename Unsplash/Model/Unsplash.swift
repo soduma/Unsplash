@@ -1,5 +1,5 @@
 //
-//  UnsplashAPI.swift
+//  Unsplash.swift
 //  Unsplash
 //
 //  Created by 장기화 on 2022/03/13.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UnsplashAPI: Codable {
+struct Unsplash: Codable {
     let results: [Results]
 }
 
