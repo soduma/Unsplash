@@ -16,7 +16,7 @@ enum ImageSize: String {
 }
 
 class MainViewController: UIViewController {
-    var searchText = "Korea"
+    var searchText = "Seoul"
     var segmentIndex: ImageSize = .full
     
     private lazy var logoLabel: UILabel = {
@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.text = "Korea"
+        bar.text = "Seoul"
         bar.placeholder = "키워드 검색"
         bar.searchBarStyle = .minimal
         bar.delegate = self

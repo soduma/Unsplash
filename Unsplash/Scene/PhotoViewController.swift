@@ -40,9 +40,9 @@ class PhotoViewController: UIViewController {
         super.viewDidLoad()
         
         Task {
+            setLayout()
             await fetch()
             isLoading = false
-            setLayout()
 //            print("😍 \(imageList)")
         }
     }
@@ -76,24 +76,28 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoTableViewCell.identifier, for: indexPath) as? PhotoTableViewCell else { return UITableViewCell() }
+        let data = imageList[indexPath.row]
         
         switch segmentIndex {
         case .raw:
-            let image = imageList[indexPath.row].urls.raw
+            let image = data.urls.raw
             let placeHolder = imageList[indexPath.row].blurHash
-            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            cell.setImage(imageURL: image, placeHolder: placeHolder)
+            cell.setDescription(data: data)
             return cell
             
         case .full:
-            let image = imageList[indexPath.row].urls.regular
+            let image = data.urls.regular
             let placeHolder = imageList[indexPath.row].blurHash
-            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            cell.setImage(imageURL: image, placeHolder: placeHolder)
+            cell.setDescription(data: data)
             return cell
             
         case .small:
-            let image = imageList[indexPath.row].urls.small
+            let image = data.urls.small
             let placeHolder = imageList[indexPath.row].blurHash
-            cell.setupImage(imageURL: image, placeHolder: placeHolder)
+            cell.setImage(imageURL: image, placeHolder: placeHolder)
+            cell.setDescription(data: data)
             return cell
         }
     }

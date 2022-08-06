@@ -14,12 +14,14 @@ struct Unsplash: Codable {
 struct Results: Codable {
     let id: String
     let blurHash: String
+    let description: String?
+    let altDescription: String?
     let urls: Urls
 
     enum CodingKeys: String, CodingKey {
-        case id
+        case id, description, urls
         case blurHash = "blur_hash"
-        case urls
+        case altDescription = "alt_description"
     }
 }
 
