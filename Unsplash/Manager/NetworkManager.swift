@@ -13,6 +13,7 @@ class NetworkManager {
     
     // MARK: - with Async
     func fetchWithAsync(keyword: String, page: Int) async -> Result<Unsplash, AFError> {
+        let keyword = keyword.replacingOccurrences(of: " ", with: "")
         let url = urlString + "&query=\(keyword)&page=\(page)"
         let data = await AF.request(url, method: .get).serializingDecodable(Unsplash.self).result
         return data

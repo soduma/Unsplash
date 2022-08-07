@@ -29,7 +29,7 @@ class PhotoTableViewCell: UITableViewCell {
     
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16, weight: .light)
+        label.font = UIFont.italicSystemFont(ofSize: 16)
         label.numberOfLines = 0
         return label
     }()
@@ -47,7 +47,7 @@ class PhotoTableViewCell: UITableViewCell {
         outerVisualEffectView.snp.makeConstraints {
             $0.bottom.leading.equalToSuperview().inset(20)
             $0.width.lessThanOrEqualTo(safeAreaLayoutGuide).inset(20)
-            $0.height.lessThanOrEqualTo(100)
+            $0.height.lessThanOrEqualTo(88)
         }
         
         outerVisualEffectView.contentView.addSubview(descriptionLabel)
