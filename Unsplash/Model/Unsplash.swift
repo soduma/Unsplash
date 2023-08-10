@@ -27,7 +27,7 @@ struct Results: Codable {
 
 struct Urls: Codable {
     let raw: String
-    let full: String
+//    let full: String
     let regular: String
     let small: String
 }

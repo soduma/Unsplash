@@ -1,5 +1,5 @@
 //
-//  PhotoTableViewCell.swift
+//  PhotoCell.swift
 //  Unsplash
 //
 //  Created by 장기화 on 2022/03/14.
@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class PhotoTableViewCell: UITableViewCell {
-    static let identifier = "PhotoTableViewCell"
+class PhotoCell: UITableViewCell {
+    static let identifier = "PhotoCell"
     
     private lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -57,15 +57,24 @@ class PhotoTableViewCell: UITableViewCell {
         }
     }
     
-    func setImage(imageURL: String, placeHolder: String?) {
-        guard let url = URL(string: imageURL),
-              let placeHolder = placeHolder else { return }
-        let holder = UIImage(blurHash: placeHolder, size: CGSize(width: 32, height: 32))
-        photoImageView.kf.setImage(with: url, placeholder: holder)
-    }
-    
-    func setDescription(data: Results) {
-        guard let description = data.description != nil ? data.description : data.altDescription else { return }
+    func setImage(photoSize: PhotoSize, photo: Results) {
+        var urlString = ""
+        
+        switch photoSize {
+        case .raw:
+            urlString = photo.urls.raw
+        case .regular:
+            urlString = photo.urls.regular
+        default:
+            urlString = photo.urls.small
+        }
+        
+        guard let url = URL(string: urlString) else { return }
+        let blurHash = photo.blurHash
+        let placeHolder = UIImage(blurHash: blurHash, size: CGSize(width: 32, height: 32))
+        photoImageView.kf.setImage(with: url, placeholder: placeHolder)
+        
+        guard let description = photo.description != nil ? photo.description : photo.altDescription else { return }
         descriptionLabel.text = description
     }
 }
