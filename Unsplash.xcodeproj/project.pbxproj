@@ -17,9 +17,10 @@
 		A028BCC027C8B1F300487E66 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A028BCBF27C8B1F300487E66 /* Alamofire */; };
 		A0A4656C27DDCC7E004C226B /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */; };
 		A0A4656F27DDDCC7004C226B /* Unsplash.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4656E27DDDCC7004C226B /* Unsplash.swift */; };
-		A0A4657327DF1EA1004C226B /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */; };
+		A0A4657327DF1EA1004C226B /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657227DF1EA1004C226B /* PhotoCell.swift */; };
 		A0A4657727DF33A7004C226B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657627DF33A7004C226B /* NetworkManager.swift */; };
 		A0A4657927DF918D004C226B /* BlurHashDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657827DF918C004C226B /* BlurHashDecode.swift */; };
+		F722D3932A837F6300C043E3 /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F722D3922A837F6300C043E3 /* PhotoViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,9 +33,10 @@
 		A028BCAF27C8B19400487E66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		A0A4656E27DDDCC7004C226B /* Unsplash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unsplash.swift; sourceTree = "<group>"; };
-		A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTableViewCell.swift; sourceTree = "<group>"; };
+		A0A4657227DF1EA1004C226B /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		A0A4657627DF33A7004C226B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A0A4657827DF918C004C226B /* BlurHashDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurHashDecode.swift; sourceTree = "<group>"; };
+		F722D3922A837F6300C043E3 /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,15 +80,12 @@
 		A028BCA027C8B19100487E66 /* Unsplash */ = {
 			isa = PBXGroup;
 			children = (
-				A028BCA127C8B19100487E66 /* AppDelegate.swift */,
-				A028BCA327C8B19100487E66 /* SceneDelegate.swift */,
-				A0A4657B27DF95A8004C226B /* Model */,
-				15033A82289BB69700682AE6 /* Manager */,
-				A0A4657C27DF9710004C226B /* Scene */,
+				F722D3902A837D3200C043E3 /* Setting */,
 				A0A4657A27DF959C004C226B /* Extention */,
-				A028BCAA27C8B19400487E66 /* Assets.xcassets */,
-				A028BCAC27C8B19400487E66 /* LaunchScreen.storyboard */,
-				A028BCAF27C8B19400487E66 /* Info.plist */,
+				15033A82289BB69700682AE6 /* Manager */,
+				A0A4657B27DF95A8004C226B /* Model */,
+				F722D3942A837F6600C043E3 /* ViewModel */,
+				A0A4657C27DF9710004C226B /* View */,
 			);
 			path = Unsplash;
 			sourceTree = "<group>";
@@ -107,14 +106,42 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		A0A4657C27DF9710004C226B /* Scene */ = {
+		A0A4657C27DF9710004C226B /* View */ = {
 			isa = PBXGroup;
 			children = (
 				A028BCA527C8B19100487E66 /* MainViewController.swift */,
 				A0A4656B27DDCC7E004C226B /* PhotoViewController.swift */,
-				A0A4657227DF1EA1004C226B /* PhotoTableViewCell.swift */,
+				F722D3912A837E5000C043E3 /* Cell */,
 			);
-			path = Scene;
+			path = View;
+			sourceTree = "<group>";
+		};
+		F722D3902A837D3200C043E3 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				A028BCA127C8B19100487E66 /* AppDelegate.swift */,
+				A028BCA327C8B19100487E66 /* SceneDelegate.swift */,
+				A028BCAA27C8B19400487E66 /* Assets.xcassets */,
+				A028BCAC27C8B19400487E66 /* LaunchScreen.storyboard */,
+				A028BCAF27C8B19400487E66 /* Info.plist */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		F722D3912A837E5000C043E3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A0A4657227DF1EA1004C226B /* PhotoCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		F722D3942A837F6600C043E3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F722D3922A837F6300C043E3 /* PhotoViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,8 +226,9 @@
 			files = (
 				A028BCA627C8B19100487E66 /* MainViewController.swift in Sources */,
 				A0A4656F27DDDCC7004C226B /* Unsplash.swift in Sources */,
-				A0A4657327DF1EA1004C226B /* PhotoTableViewCell.swift in Sources */,
+				A0A4657327DF1EA1004C226B /* PhotoCell.swift in Sources */,
 				A0A4656C27DDCC7E004C226B /* PhotoViewController.swift in Sources */,
+				F722D3932A837F6300C043E3 /* PhotoViewModel.swift in Sources */,
 				A0A4657727DF33A7004C226B /* NetworkManager.swift in Sources */,
 				A028BCA227C8B19100487E66 /* AppDelegate.swift in Sources */,
 				A0A4657927DF918D004C226B /* BlurHashDecode.swift in Sources */,
@@ -347,12 +375,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HM9J3DG5MT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Unsplash/Info.plist;
+				INFOPLIST_FILE = Unsplash/Setting/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -360,9 +387,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.soduma.Unsplash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -375,12 +405,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HM9J3DG5MT;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Unsplash/Info.plist;
+				INFOPLIST_FILE = Unsplash/Setting/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -388,9 +417,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.soduma.Unsplash;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
