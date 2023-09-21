@@ -7,17 +7,28 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class MainViewController: UIViewController {
-    private var photoSize: PhotoSize = .regular
-    private var keyword = ""
+    let viewModel = PhotoViewModel()
+    let disposeBag = DisposeBag()
+    
+    private lazy var searchButton = MovableBottomButton()
+    
+    private lazy var logoBaseView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red.withAlphaComponent(0.8)
+        view.layer.cornerRadius = 40
+        view.clipsToBounds = true
+        return view
+    }()
     
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
         label.text = "Unsplash"
-        label.font = .systemFont(ofSize: 100, weight: .bold)
+        label.textColor = .systemTeal
+        label.font = .systemFont(ofSize: 100, weight: .heavy)
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = .label
         return label
     }()
     
@@ -28,143 +39,109 @@ class MainViewController: UIViewController {
         segment.insertSegment(withTitle: "Small", at: 2, animated: true)
         segment.tintColor = .systemGray
         segment.selectedSegmentIndex = 1
-        segment.addTarget(self, action: #selector(tapSegment(sender:)), for: .valueChanged)
         return segment
     }()
     
     private lazy var searchBar: UISearchBar = {
         let bar = UISearchBar()
-        bar.text = keyword
-        bar.placeholder = "키워드"
+        bar.text = ""
+        bar.placeholder = "Keyword"
         bar.searchBarStyle = .minimal
-        bar.delegate = self
         return bar
-    }()
-    
-    private lazy var searchButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("검색", for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.setTitleColor(.systemGray, for: .disabled)
-        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
-        button.backgroundColor = .systemYellow
-        if #available(iOS 15.0, *) {
-            button.contentVerticalAlignment = .top
-            button.contentEdgeInsets.top = 18
-        } else {
-            button.layer.cornerRadius = 12
-        }
-        button.isEnabled = false
-        button.addTarget(self, action: #selector(tapSearchButton), for: .touchUpInside)
-        return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLayout()
+        bind()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        searchBar.becomeFirstResponder()
+//        searchBar.becomeFirstResponder()
     }
     
     func setLayout() {
-        [logoLabel, segmentedControl, searchBar, searchButton]
+        [logoBaseView, logoLabel, segmentedControl, searchBar]
             .forEach { view.addSubview($0) }
         
+        logoBaseView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(100)
+        }
+        
         logoLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().inset(40)
+            $0.center.equalTo(logoBaseView)
+            $0.leading.trailing.equalTo(logoBaseView).inset(20)
         }
         
         segmentedControl.snp.makeConstraints {
-            $0.top.equalTo(logoLabel.snp.bottom).offset(50)
-            $0.leading.trailing.equalToSuperview().inset(28)
             $0.centerX.equalToSuperview()
+            $0.top.equalTo(logoLabel.snp.bottom).offset(20)
+            $0.leading.trailing.equalToSuperview().inset(28)
+            $0.height.equalTo(40)
         }
                 
         searchBar.snp.makeConstraints {
-            $0.top.equalTo(segmentedControl.snp.bottom).offset(5)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(40)
         }
         
-        searchButton.snp.makeConstraints {
-            if #available(iOS 15.0, *) {
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalTo(view.keyboardLayoutGuide)
-                $0.height.equalTo(80)
-            } else {
-                $0.top.equalTo(searchBar.snp.bottom).offset(40)
-                $0.leading.trailing.equalToSuperview().inset(24)
-                $0.height.equalTo(60)
-            }
-        }
-        
-        let backGesture = UITapGestureRecognizer(target: self, action: #selector(tapBack))
+        searchButton = setBottomButtonMove(title: "SEARCH", initialEnable: false, view: view, bag: disposeBag)
+    }
+    
+    private func bind() {
+        let backGesture = UITapGestureRecognizer()
         view.addGestureRecognizer(backGesture)
-    }
-    
-    @objc func tapSegment(sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            photoSize = .raw
-        case 1:
-            photoSize = .regular
-        default:
-            photoSize = .small
-        }
-    }
-    
-    @objc func tapBack() {
-        searchBar.endEditing(true)
+        backGesture.rx.event.bind(onNext: { _ in
+            self.searchBar.endEditing(true)
+        }).disposed(by: disposeBag)
         
-        if #available(iOS 15.0, *) {
-            searchButton.snp.remakeConstraints {
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalTo(view.keyboardLayoutGuide)
-                $0.height.equalTo(80)
-            }
-        }
-    }
-    
-    @objc func tapSearchButton() {
-        if keyword.isEmpty == false {
-            searchBar.resignFirstResponder()
-            
-            let vc = PhotoViewController(keyword: keyword, photoSize: photoSize)
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-}
-
-extension MainViewController: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        if #available(iOS 15.0, *) {
-            searchButton.snp.remakeConstraints {
-                $0.leading.trailing.equalToSuperview()
-                $0.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
-                $0.height.equalTo(80)
-            }
-            
-            UIView.animate(withDuration: 0) {
-                self.searchButton.snp.updateConstraints {
-                    $0.height.equalTo(60)
+        searchBar.rx.text.orEmpty
+            .distinctUntilChanged()
+            .subscribe(onNext: { text in
+                if text.isEmpty {
+                    self.searchButton.isEnabled = false
+                } else {
+                    self.searchButton.isEnabled = true
+                    self.viewModel.keyword = text
                 }
-            }
-        }
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            searchButton.isEnabled = false
-        } else {
-            searchButton.isEnabled = true
-        }
+                
+            }).disposed(by: disposeBag)
         
-        let searchText = searchText.replacingOccurrences(of: " ", with: "")
-        keyword = searchText
+        searchBar.rx.searchButtonClicked
+            .subscribe(onNext: { [weak self] in
+                guard let self else { return }
+                searchBar.resignFirstResponder()
+                
+                let vc = PhotoViewController(viewModel: viewModel)
+                navigationController?.pushViewController(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
+        searchButton.rx.tap
+            .bind(onNext: { [weak self] in
+                guard let self else { return }
+                searchBar.resignFirstResponder()
+                
+                let vc = PhotoViewController(viewModel: viewModel)
+                navigationController?.pushViewController(vc, animated: true)
+            }).disposed(by: disposeBag)
+        
+        segmentedControl.rx.selectedSegmentIndex
+            .subscribe(onNext: { [weak self] index in
+                guard let self else { return }
+                switch index {
+                case 0:
+                    viewModel.photoSize = .raw
+                case 1:
+                    viewModel.photoSize = .regular
+                default:
+                    viewModel.photoSize = .small
+                }
+            }).disposed(by: disposeBag)
     }
 }

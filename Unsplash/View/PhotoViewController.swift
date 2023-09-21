@@ -8,15 +8,12 @@
 import UIKit
 
 class PhotoViewController: UIViewController {
-    let viewModel = PhotoViewModel()
     var photoList = [Results]()
     
-    let keyword: String
-    let photoSize: PhotoSize
+    let viewModel: PhotoViewModel
     
-    init(keyword: String, photoSize: PhotoSize) {
-        self.keyword = keyword
-        self.photoSize = photoSize
+    init(viewModel: PhotoViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,25 +31,39 @@ class PhotoViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setLayout()
         
+        viewModel.isFetching = true
+        activityIndicator.startAnimating()
+        
         Task {
-            viewModel.isFetching = true
-            photoList = await viewModel.getPhoto(keyword: keyword)
+            photoList = await viewModel.getPhoto(keyword: viewModel.keyword)
             tableView.reloadData()
+            activityIndicator.stopAnimating()
         }
     }
     
     private func setLayout() {
-        title = keyword
+        title = viewModel.keyword
         view.backgroundColor = .systemBackground
         
-        view.addSubview(tableView)
+        [tableView, activityIndicator]
+            .forEach {view.addSubview($0) }
+        
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        activityIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
 }
@@ -63,9 +74,10 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else {
+            return UITableViewCell() }
         let photo = photoList[indexPath.row]
-        cell.setImage(photoSize: photoSize, photo: photo)
+        cell.setImage(photoSize: viewModel.photoSize, photo: photo)
         return cell
     }
     
@@ -84,7 +96,7 @@ extension PhotoViewController: UITableViewDataSource, UITableViewDelegate {
             viewModel.isFetching = true
             
             Task {
-                photoList += await viewModel.getPhoto(keyword: keyword)
+                photoList += await viewModel.getPhoto(keyword: viewModel.keyword)
                 tableView.reloadData()
             }
         }
