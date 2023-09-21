@@ -21,13 +21,11 @@
 		A0A4657727DF33A7004C226B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657627DF33A7004C226B /* NetworkManager.swift */; };
 		A0A4657927DF918D004C226B /* BlurHashDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A4657827DF918C004C226B /* BlurHashDecode.swift */; };
 		F722D3932A837F6300C043E3 /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F722D3922A837F6300C043E3 /* PhotoViewModel.swift */; };
+		F729F8AA2ABD0B080057C5FF /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = F729F8A92ABD0B080057C5FF /* RxBlocking */; };
+		F729F8AC2ABD0B080057C5FF /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F729F8AB2ABD0B080057C5FF /* RxCocoa */; };
+		F729F8AE2ABD0B080057C5FF /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F729F8AD2ABD0B080057C5FF /* RxRelay */; };
 		F73545322ABB46F80001C9BE /* MovableBottomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73545312ABB46F80001C9BE /* MovableBottomButton.swift */; };
 		F73545342ABB474A0001C9BE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73545332ABB474A0001C9BE /* UIDevice.swift */; };
-		F73545372ABBF75E0001C9BE /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = F73545362ABBF75E0001C9BE /* RxBlocking */; };
-		F73545392ABBF75E0001C9BE /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F73545382ABBF75E0001C9BE /* RxBlocking-Dynamic */; };
-		F735453B2ABBF75E0001C9BE /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F735453A2ABBF75E0001C9BE /* RxCocoa */; };
-		F735453D2ABBF75E0001C9BE /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F735453C2ABBF75E0001C9BE /* RxCocoa-Dynamic */; };
-		F735453F2ABBF75E0001C9BE /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F735453E2ABBF75E0001C9BE /* RxRelay */; };
 		F73545422ABBF7770001C9BE /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = F73545412ABBF7770001C9BE /* RxKeyboard */; };
 /* End PBXBuildFile section */
 
@@ -54,15 +52,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F735453B2ABBF75E0001C9BE /* RxCocoa in Frameworks */,
+				F729F8AC2ABD0B080057C5FF /* RxCocoa in Frameworks */,
 				F73545422ABBF7770001C9BE /* RxKeyboard in Frameworks */,
-				F735453D2ABBF75E0001C9BE /* RxCocoa-Dynamic in Frameworks */,
+				F729F8AE2ABD0B080057C5FF /* RxRelay in Frameworks */,
 				A028BCC027C8B1F300487E66 /* Alamofire in Frameworks */,
-				F73545372ABBF75E0001C9BE /* RxBlocking in Frameworks */,
 				A028BCBD27C8B1DD00487E66 /* Kingfisher in Frameworks */,
 				A028BCB727C8B1BA00487E66 /* SnapKit in Frameworks */,
-				F735453F2ABBF75E0001C9BE /* RxRelay in Frameworks */,
-				F73545392ABBF75E0001C9BE /* RxBlocking-Dynamic in Frameworks */,
+				F729F8AA2ABD0B080057C5FF /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,12 +178,10 @@
 				A028BCB627C8B1BA00487E66 /* SnapKit */,
 				A028BCBC27C8B1DD00487E66 /* Kingfisher */,
 				A028BCBF27C8B1F300487E66 /* Alamofire */,
-				F73545362ABBF75E0001C9BE /* RxBlocking */,
-				F73545382ABBF75E0001C9BE /* RxBlocking-Dynamic */,
-				F735453A2ABBF75E0001C9BE /* RxCocoa */,
-				F735453C2ABBF75E0001C9BE /* RxCocoa-Dynamic */,
-				F735453E2ABBF75E0001C9BE /* RxRelay */,
 				F73545412ABBF7770001C9BE /* RxKeyboard */,
+				F729F8A92ABD0B080057C5FF /* RxBlocking */,
+				F729F8AB2ABD0B080057C5FF /* RxCocoa */,
+				F729F8AD2ABD0B080057C5FF /* RxRelay */,
 			);
 			productName = Unsplash;
 			productReference = A028BC9E27C8B19100487E66 /* Unsplash.app */;
@@ -221,8 +215,8 @@
 				A028BCB527C8B1BA00487E66 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				A028BCBB27C8B1DD00487E66 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				A028BCBE27C8B1F300487E66 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */,
 				F73545402ABBF7770001C9BE /* XCRemoteSwiftPackageReference "RxKeyboard" */,
+				F729F8A82ABD0B080057C5FF /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = A028BC9F27C8B19100487E66 /* Products */;
 			projectDirPath = "";
@@ -502,7 +496,7 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+		F729F8A82ABD0B080057C5FF /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
 			requirement = {
@@ -536,29 +530,19 @@
 			package = A028BCBE27C8B1F300487E66 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		F73545362ABBF75E0001C9BE /* RxBlocking */ = {
+		F729F8A92ABD0B080057C5FF /* RxBlocking */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = F729F8A82ABD0B080057C5FF /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxBlocking;
 		};
-		F73545382ABBF75E0001C9BE /* RxBlocking-Dynamic */ = {
+		F729F8AB2ABD0B080057C5FF /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxBlocking-Dynamic";
-		};
-		F735453A2ABBF75E0001C9BE /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = F729F8A82ABD0B080057C5FF /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
 		};
-		F735453C2ABBF75E0001C9BE /* RxCocoa-Dynamic */ = {
+		F729F8AD2ABD0B080057C5FF /* RxRelay */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
-		};
-		F735453E2ABBF75E0001C9BE /* RxRelay */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F73545352ABBF75E0001C9BE /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = F729F8A82ABD0B080057C5FF /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxRelay;
 		};
 		F73545412ABBF7770001C9BE /* RxKeyboard */ = {
