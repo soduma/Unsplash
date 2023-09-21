@@ -15,6 +15,8 @@ enum PhotoSize {
 }
 
 class PhotoViewModel {
+    var photoSize: PhotoSize = .regular
+    var keyword = ""
     var currentPage = 1
     var isFetching = true
     
